@@ -32,7 +32,7 @@ createApp({
           this.products = res.data.products;
         })
         .catch((err)=>{
-          console.log(err)
+          // console.log(err)
           alert(err.data.message)
         })
         },
@@ -63,17 +63,15 @@ createApp({
           // 新增
               axios.post(api).then((res) =>{
                 this.myModal.hide()
-                this.getData();
+                this.getProducts();
               console.log(res);
             })
-          if(!this.isNew){
+          if(this.isNew){
             // 編輯
             axios.put(url,{data:this.temProduct}).then((res)=>{
-              console.log(`data:this.temProduct`)
             alert(res.data.message);
-            // this.openModal()
             this.myModal.hide()
-            // this.getData();
+            this.getProducts();
            }).catch((err) => {
            alert(err.data.message);
            })

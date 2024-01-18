@@ -17,7 +17,7 @@ createApp({
             const url = `${this.apiUrl}/api/user/check`;
             axios.post(url)
             .then(()=>{
-              this.getData()
+              // this.getData()
             })
             .catch((err)=>{
               alert(err.data.message)
@@ -61,12 +61,12 @@ createApp({
           const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`//更新產品
           const api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;//建立產品
           // 新增
-              axios.post(api).then((res) =>{
+                axios.post(api,{data:this.temProduct}).then((res) =>{
                 this.myModal.hide()
                 this.getProducts();
               console.log(res);
             })
-          if(this.isNew){
+          if(!this.isNew){
             // 編輯
             axios.put(url,{data:this.temProduct}).then((res)=>{
             alert(res.data.message);
@@ -96,7 +96,7 @@ createApp({
         this.myModal = new bootstrap.Modal(document.querySelector('#productModal'));
         this.delmodel =  new bootstrap.Modal(document.querySelector('#delProductModal'));
         this.getProducts();
-        this.updateProduct();
+        // this.updateProduct();
      },
     }).mount('#app');
 // 流程：

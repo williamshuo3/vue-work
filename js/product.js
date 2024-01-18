@@ -8,6 +8,7 @@ createApp({
             products:[],
             myModal:'',
             temProduct:{},
+            isNew:false,
         }
     },
     methods:{
@@ -38,15 +39,47 @@ createApp({
         openModal(){
             this.myModal.show()
         },
-        closeModal(){
-            this.myModal.hide()
+        // closeModal(){
+        //     this.myModal.hide()
+        // },
+        delModel(){
+          this.delmodel.show()
+        },
+        updateProduct(){
+          const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`
+          const api = `${this.apiUrl}/api/${this.apiPath}/admin/product/`;
+          if(!this.isNew){
+              axios.put(url).then((res) =>{
+              console.log(res);
+            })
+          }
+
+          axios.post(api,{data:this.temProduct}).then((res)=>{
+            alert(res.data.message)
+            this.openModal()
+            // this.myModal.hide()
+            // this.getData();
+           }).catch((err) => {
+           alert(err.data.message);
+           })
+        },
+        dleProduct(){
+          const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`
+          axios.delete(url).then((res)=>{
+            this.delModel()
+            console.log(res);
+          }).catch((err) => {
+            alert(err.data.message);
+            })
         }
     },
+    
     mounted(){
         const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
         axios.defaults.headers.common.Authorization = token;
 
-        this.myModal = new bootstrap.Modal(document.querySelector('#productModal'))
+        this.myModal = new bootstrap.Modal(document.querySelector('#productModal'));
+        this.delmodel =  new bootstrap.Modal(document.querySelector('#delProductModal'));
         this.getProducts()
      },
     }).mount('#app');

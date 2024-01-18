@@ -7,7 +7,7 @@ createApp({
             apiPath: 'shuo-api',
             products:[],
             myModal:'',
-            temProduct:{},
+            temProduct:{imagesUrl: []},
             isNew:false,
         }
     },
@@ -36,42 +36,59 @@ createApp({
           alert(err.data.message)
         })
         },
-        openModal(){
+        openModal(isNew,item){
+          if(isNew === 'new'){
+            this.temProduct={};
+            this.isNew = true;
+            this.myModal.show();
+          }else if(isNew === 'edit'){
+            this.temProduct = { ...item};
+            this.isNew = false;
             this.myModal.show()
+          }else if(isNew === 'del'){
+            this.temProduct = { ...item};
+            this.delmodel.show();
+          }
+          this.isNew = isNew;
         },
         // closeModal(){
         //     this.myModal.hide()
         // },
         delModel(){
-          this.delmodel.show()
+          this.delmodel.hide();
         },
         updateProduct(){
-          const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`
-          const api = `${this.apiUrl}/api/${this.apiPath}/admin/product/`;
-          if(!this.isNew){
-              axios.put(url).then((res) =>{
+          const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`//更新產品
+          const api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;//建立產品
+          // 新增
+              axios.post(api).then((res) =>{
+                this.myModal.hide()
+                this.getData();
               console.log(res);
             })
-          }
-
-          axios.post(api,{data:this.temProduct}).then((res)=>{
-            alert(res.data.message)
-            this.openModal()
-            // this.myModal.hide()
+          if(!this.isNew){
+            // 編輯
+            axios.put(url,{data:this.temProduct}).then((res)=>{
+              console.log(`data:this.temProduct`)
+            alert(res.data.message);
+            // this.openModal()
+            this.myModal.hide()
             // this.getData();
            }).catch((err) => {
            alert(err.data.message);
            })
+          }
+           
         },
         dleProduct(){
           const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`
           axios.delete(url).then((res)=>{
-            this.delModel()
-            console.log(res);
+            this.delModel();
+            this.getProducts();
           }).catch((err) => {
             alert(err.data.message);
             })
-        }
+        },
     },
     
     mounted(){
@@ -80,7 +97,8 @@ createApp({
 
         this.myModal = new bootstrap.Modal(document.querySelector('#productModal'));
         this.delmodel =  new bootstrap.Modal(document.querySelector('#delProductModal'));
-        this.getProducts()
+        this.getProducts();
+        this.updateProduct();
      },
     }).mount('#app');
 // 流程：

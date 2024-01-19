@@ -58,24 +58,29 @@ createApp({
           this.delmodel.hide();
         },
         updateProduct(){
-          const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`//更新產品
-          const api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;//建立產品
+          let api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;//建立產品
+          let http = 'post';
+          //  編輯
+          if(!this.isNew) {
+            api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`//更新產品
+            http = 'put'
+          }
           // 新增
-                axios.post(api,{data:this.temProduct}).then((res) =>{
+                axios[http](api,{data:this.temProduct}).then((res) =>{
                 this.myModal.hide()
                 this.getProducts();
               console.log(res);
             })
-          if(!this.isNew){
-            // 編輯
-            axios.put(url,{data:this.temProduct}).then((res)=>{
-            alert(res.data.message);
-            this.myModal.hide()
-            this.getProducts();
-           }).catch((err) => {
-           alert(err.data.message);
-           })
-          }
+          // if(!this.isNew){
+          //   // 編輯
+          //   axios.put(url).then((res)=>{
+          //   alert(res.data.message);
+          //   this.myModal.hide()
+          //   this.getProducts();
+          //  }).catch((err) => {
+          //  alert(err.data.message);
+          //  })
+          // }
            
         },
         dleProduct(){
@@ -99,6 +104,3 @@ createApp({
         // this.updateProduct();
      },
     }).mount('#app');
-// 流程：
-// 1.先使用prors將外層資料傳送到內層
-// 2.在出發emit事件將內層的資料傳出去

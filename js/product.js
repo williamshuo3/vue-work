@@ -71,7 +71,9 @@ createApp({
                 this.myModal.hide()
                 this.getProducts();
               console.log(res);
-            })
+            }).catch((err) => {
+               alert(err.data.message);
+               })
           // if(!this.isNew){
           //   // 編輯
           //   axios.put(url).then((res)=>{

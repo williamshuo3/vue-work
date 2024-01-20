@@ -49,7 +49,7 @@ createApp({
             this.temProduct = { ...item};
             this.delmodel.show();
           }
-          this.isNew = isNew;
+          // this.isNew = isNew;
         },
         // closeModal(){
         //     this.myModal.hide()
@@ -65,6 +65,7 @@ createApp({
             api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`//更新產品
             http = 'put'
           }
+          console.log(this.isNew)
           // 新增
                 axios[http](api,{data:this.temProduct}).then((res) =>{
                 this.myModal.hide()

@@ -1,6 +1,6 @@
 import{ createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
  
-createApp({
+const app = createApp({
     data(){
         return{
             apiUrl: 'https://vue3-course-api.hexschool.io/v2',
@@ -111,5 +111,5 @@ createApp({
         this.getProducts();
         // this.uploadFile();
      },
-    }).mount('#app');
+    });app.mount('#app');
     

@@ -24,6 +24,7 @@ createApp({
         })
         .catch((err) =>{
             alert(err.data.message);
+            window.location = 'login.html';
         })
     }
     },

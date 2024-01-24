@@ -23,7 +23,8 @@ createApp({
             window.location = 'product.html';
         })
         .catch((err) =>{
-            alert(err.data.message)
+            alert(err.data.message);
+            window.location = 'login.html'
         })
     }
     },

@@ -27,14 +27,14 @@ createApp({
         //   取得商品列表
         getProducts(){
             const url = `${this.apiUrl}/api/${this.apiPath}/admin/products/all`
-        axios.get(url)
-        .then((res)=>{
-          this.products = res.data.products;
-        })
-        .catch((err)=>{
-          // console.log(err)
-          alert(err.data.message)
-        })
+          axios.get(url)
+          .then((res)=>{
+            this.products = res.data.products;
+          })
+          .catch((err)=>{
+            // console.log(err)
+            alert(err.data.message)
+          })
         },
         openModal(isNew,item){
           if(isNew === 'new'){
@@ -51,9 +51,10 @@ createApp({
           }
           // this.isNew = isNew;
         },
-        // closeModal(){
-        //     this.myModal.hide()
-        // },
+        createImages() {
+          this.temProduct.imagesUrl = [];
+          this.temProduct.imagesUrl.push('');
+        },
         delModel(){
           this.delmodel.hide();
         },
@@ -95,6 +96,10 @@ createApp({
             alert(err.data.message);
             })
         },
+        // uploadFile() {
+        //   const url = `${this.apiUrl}/api/${this.apiPath}/admin/upload`
+        //   console.log(url)
+        // },
     },
     
     mounted(){
@@ -104,6 +109,7 @@ createApp({
         this.myModal = new bootstrap.Modal(document.querySelector('#productModal'));
         this.delmodel =  new bootstrap.Modal(document.querySelector('#delProductModal'));
         this.getProducts();
-        // this.updateProduct();
+        // this.uploadFile();
      },
     }).mount('#app');
+    

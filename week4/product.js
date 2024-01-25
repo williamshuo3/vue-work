@@ -52,7 +52,6 @@ const app = createApp({
             this.temProduct = { ...item};
             delProductModal.show();
           }
-          // this.isNew = isNew;
         },
         // createImage() {
         //   this.temProduct.imageUrl = [];

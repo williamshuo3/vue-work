@@ -1,5 +1,6 @@
 import{ createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
-let productModal = null;
+let  productModal = null
+let delProductModal = null
 const app = createApp({
     data(){
         return{
@@ -7,7 +8,8 @@ const app = createApp({
             apiPath: 'shuo-api',
             products:[],
             myModal:'',
-            temProduct:{imagesUrl: []},
+            temProduct:{imageUrl: []},
+            pagination:{},
             isNew:false,
         }
     },
@@ -25,11 +27,12 @@ const app = createApp({
             })
           },
         //   取得商品列表
-        getProducts(){
-            const url = `${this.apiUrl}/api/${this.apiPath}/admin/products/all`
+        getProducts(page=1){
+            const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`
           axios.get(url)
           .then((res)=>{
             this.products = res.data.products;
+            this.pagination = res.data.pagination
           })
           .catch((err)=>{
             // console.log(err)
@@ -47,17 +50,17 @@ const app = createApp({
             productModal.show()
           }else if(isNew === 'del'){
             this.temProduct = { ...item};
-            this.delmodel.show();
+            delProductModal.show();
           }
           // this.isNew = isNew;
         },
-        createImages() {
-          this.temProduct.imagesUrl = [];
-          this.temProduct.imagesUrl.push('');
-        },
-        delModel(){
-          this.delmodel.hide();
-        },
+        // createImage() {
+        //   this.temProduct.imageUrl = [];
+        //   this.temProduct.imageUrl.push('');
+        // },
+        // delModel(){
+        //   this.delmodel.hide();
+        // },
         // updateProduct(){
         //   let api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;//建立產品
         //   let http = 'post';
@@ -75,46 +78,51 @@ const app = createApp({
         //     }).catch((err) => {
         //        alert(err.data.message);
         //        })
-        //   // if(!this.isNew){
-        //   //   // 編輯
-        //   //   axios.put(url).then((res)=>{
-        //   //   alert(res.data.message);
-        //   //   this.myModal.hide()
-        //   //   this.getProducts();
-        //   //  }).catch((err) => {
-        //   //  alert(err.data.message);
-        //   //  })
-        //   // }
            
         // },
-        dleProduct(){
-          const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`
-          axios.delete(url).then((res)=>{
-            this.delModel();
-            this.getProducts();
-          }).catch((err) => {
-            alert(err.data.message);
-            })
-        },
+        // dleProduct(){
+        //   const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`
+        //   axios.delete(url).then((res)=>{
+        //     this.delModel();
+        //     this.getProducts();
+        //   }).catch((err) => {
+        //     alert(err.data.message);
+        //     })
+        // },
     },
     
     mounted(){
         const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
         axios.defaults.headers.common.Authorization = token;
 
-        this.myModal = new bootstrap.Modal(document.querySelector('#productModal'));
-        this.delmodel =  new bootstrap.Modal(document.querySelector('#delProductModal'));
+        // this.myModal = new bootstrap.Modal(document.querySelector('#productModal'));
+        // this.delmodel =  new bootstrap.Modal(document.querySelector('#delProductModal'));
         this.getProducts();
      },
     });
+    // 分頁元件
+    app.component('pagination',{
+        template:'#pagination',
+        props:['page'],
+        methods:{
+            updatePage(page){
+                this.$emit('emit-pages',page)
+            }
+        },
+    })
+    // 編輯元件
     app.component('productModal',{
-        temProduct:'#productModal',
+        template:'#productModal',
         props:['product','isNew'],
         data(){
             return{
-            apiUrl: 'https://vue3-course-api.hexschool.io/v2',
-            apiPath: 'shuo-api',
+                apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+                apiPath: 'shuo-api',
+                temProduct:{imageUrl: []},
             }
+        },
+        mounted(){
+            productModal = new bootstrap.Modal(document.querySelector('#productModal'));
         },
         methods:{
             updateProduct(){
@@ -122,29 +130,61 @@ const app = createApp({
                 let http = 'post';
                 //  編輯
                 if(!this.isNew) {
-                  api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.temProduct.id}`//更新產品
+                  api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.product.id}`//更新產品
                   http = 'put'
                 }
                 console.log(this.isNew)
                 // 新增
                       axios[http](api,{data:this.temProduct}).then((res) =>{
-                      this.hideModal();
-                      this.$emit('update')
-                    //   this.getProducts();
+                        this.hideModal()
+                        this.$emit('update');
                     console.log(res);
                   }).catch((err) => {
                      alert(err.data.message);
                      })
-                },
-                openModal() {
-                    productModal.show();
-                  },
-                  hideModal() {
-                    productModal.hide();
-                  },
+                 
+              },
+              createImage() {
+                this.product.imageUrl = [];
+                this.product.imageUrl.push('');
+              },
+              openModal() {
+                productModal.show();
+              },
+              hideModal() {
+                productModal.hide();
+              },
+        },
+    });
+    // 刪除元件
+    app.component('delProductModal',{
+        template:"#delProductModal",
+        props:['item'],
+        data(){
+            return{
+                apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+                apiPath: 'shuo-api',
+            }
         },
         mounted(){
-            productModal = new bootstrap.Modal(document.querySelector('#productModal'));
+            delProductModal =  new bootstrap.Modal(document.querySelector('#delProductModal'));
+        },
+        methods:{
+            dleProduct(){
+                const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.item.id}`
+                axios.delete(url).then((res)=>{
+                  this.hideModal();
+                  this.$emit('update')
+                }).catch((err) => {
+                  alert(err.data.message);
+                  })
+              },
+              openModal() {
+                delProductModal.show();
+              },
+              hideModal() {
+                delProductModal.hide();
+              },
         },
     })
     app.mount('#app');

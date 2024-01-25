@@ -63,7 +63,9 @@
         </div>
 
         <!-- Modal -->
+        <pagination  :page="pagination" @emit-pages="getProducts"></pagination>
         <product-modal ref="product" :product="temProduct" :is-new="isNew" @update="getProducts"></product-modal>
+        <del-product-modal ref="delProduct" :item="temProduct" @update="getProducts"></del-product-modal>
         <!-- <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel"
              aria-hidden="true">
           <div class="modal-dialog modal-xl">
@@ -160,7 +162,7 @@
             </div>
           </div>
         </div> -->
-        <div id="delProductModal" ref="delProductModal" class="modal fade" tabindex="-1"
+        <!-- <div id="delProductModal" ref="delProductModal" class="modal fade" tabindex="-1"
              aria-labelledby="delProductModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content border-0">
@@ -184,9 +186,29 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
+        
         <!-- Modal -->
       </div>
+      <script type="text/x-template" id="pagination">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{'disabled': page.current_page === 1}">
+              <a class="page-link" href="#" aria-label="Previous"@click.prevent="updatePage(page.current_page - 1)">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" v-for="page in page.total_pages" :key="page" :class="{'active':page ===page.total_pages}">
+              <a class="page-link" href="#" @click.prevent="updatePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{'disabled': page.current_page === page.total_pages}">
+              <a class="page-link" href="#" aria-label="Next"  @click.prevent="updatePage(page.current_page + 1)">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </script>
       <script type="text/x-template" id="productModal">
         <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel"
              aria-hidden="true">
@@ -285,10 +307,37 @@
           </div>
         </div>
       </script>
+      <script type="text/x-template" id="delProductModal">
+        <div id="delProductModal" ref="delProductModal" class="modal fade" tabindex="-1"
+             aria-labelledby="delProductModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content border-0">
+              <div class="modal-header bg-danger text-white">
+                <h5 id="delProductModalLabel" class="modal-title">
+                  <span>刪除產品</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                是否刪除
+                <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  取消
+                </button>
+                <button type="button" class="btn btn-danger" @click="dleProduct()">
+                  確認刪除
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </script>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
       integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
       crossorigin='anonymous'></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.37/vue.global.js"></script>
-      <script src="/product測試.js" type="module"></script>
+      <script src="/week4/product.js" type="module"></script>
 </body>
 </html>

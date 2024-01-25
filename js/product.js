@@ -7,7 +7,7 @@ const app = createApp({
             apiPath: 'shuo-api',
             products:[],
             myModal:'',
-            temProduct:{imagesUrl: []},
+            temProduct:{imageUrl: []},
             isNew:false,
         }
     },
@@ -51,9 +51,9 @@ const app = createApp({
           }
           // this.isNew = isNew;
         },
-        createImages() {
-          this.temProduct.imagesUrl = [];
-          this.temProduct.imagesUrl.push('');
+        createImage() {
+          this.temProduct.imageUrl = [];
+          this.temProduct.imageUrl.push('');
         },
         delModel(){
           this.delmodel.hide();

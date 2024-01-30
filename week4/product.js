@@ -1,11 +1,13 @@
 import{ createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 let  productModal = null
-let delProductModal = null
+let delProductModal = null;
+const apiUrl= 'https://vue3-course-api.hexschool.io/v2'
+const apiPath= 'shuo-api'
 const app = createApp({
     data(){
         return{
-            apiUrl: 'https://vue3-course-api.hexschool.io/v2',
-            apiPath: 'shuo-api',
+            // apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+            // apiPath: 'shuo-api',
             products:[],
             myModal:'',
             temProduct:{imageUrl: []},
@@ -16,7 +18,7 @@ const app = createApp({
     methods:{
         // 驗證登入
         check(){
-            const url = `${this.apiUrl}/api/user/check`;
+            const url = `${apiUrl}/api/user/check`;
             axios.post(url)
             .then(()=>{
               // this.getData()
@@ -28,7 +30,7 @@ const app = createApp({
           },
         //   取得商品列表
         getProducts(page=1){
-            const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`
+            const url = `${apiUrl}/api/${apiPath}/admin/products?page=${page}`
           axios.get(url)
           .then((res)=>{
             this.products = res.data.products;
@@ -125,11 +127,11 @@ const app = createApp({
         },
         methods:{
             updateProduct(){
-                let api = `${this.apiUrl}/api/${this.apiPath}/admin/product`;//建立產品
+                let api = `${apiUrl}/api/${apiPath}/admin/product`;//建立產品
                 let http = 'post';
                 //  編輯
                 if(!this.isNew) {
-                  api = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.product.id}`//更新產品
+                  api = `${apiUrl}/api/${apiPath}/admin/product/${product.id}`//更新產品
                   http = 'put'
                 }
                 console.log(this.isNew)
@@ -161,8 +163,8 @@ const app = createApp({
         props:['item'],
         data(){
             return{
-                apiUrl: 'https://vue3-course-api.hexschool.io/v2',
-                apiPath: 'shuo-api',
+                // apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+                // apiPath: 'shuo-api',
             }
         },
         mounted(){
@@ -170,7 +172,7 @@ const app = createApp({
         },
         methods:{
             dleProduct(){
-                const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.item.id}`
+                const url = `${apiUrl}/api/${apiPath}/admin/product/${this.item.id}`
                 axios.delete(url).then((res)=>{
                   this.hideModal();
                   this.$emit('update')

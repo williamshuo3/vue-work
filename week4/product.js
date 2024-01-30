@@ -20,7 +20,10 @@ const app = createApp({
         check(){
             const url = `${apiUrl}/api/user/check`;
             axios.post(url)
-            .then(()=>{
+            .then((res)=>{
+              if(res.data.success){
+                this.getProducts()
+              }
               // this.getData()
             })
             .catch((err)=>{
@@ -98,7 +101,7 @@ const app = createApp({
 
         // this.myModal = new bootstrap.Modal(document.querySelector('#productModal'));
         // this.delmodel =  new bootstrap.Modal(document.querySelector('#delProductModal'));
-        this.getProducts();
+        this.check();
      },
     });
     // 分頁元件
